@@ -40,29 +40,7 @@ public class Hide : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        Transform closestObstacle;
-        float minDist = Mathf.Infinity;
-
-        for (int i = 0; i < obstacles.Length; i++)
-        {
-
-            Vector3 distanceToObstacle = closeRangeNPC.transform.position - obstacles[i].transform.position;
-
-            //TODO && camera not in sight and opposite direction of the player 
-            if (distanceToObstacle.magnitude < shortestDistaceToObstacle.magnitude)
-            {
-                shortestDistaceToObstacle = closeRangeNPC.transform.position - obstacles[i].transform.position;
-                currentObstacle = obstacles[i];
-                Debug.Log(currentObstacle.name);
-            }
-        }
-        Debug.DrawLine(npc.transform.position, currentObstacle.transform.position, Color.white);
-        //Debug.DrawLine(target.transform.position,currentObstacle.transform.position,Color.red);
-        float distanceFromColider = 7f;
-        Vector3 direction = currentObstacle.transform.position - target.transform.position;
-        direction.Normalize();
-        hidePos = currentObstacle.transform.position + direction * distanceFromColider;
+        hidePos = FindHideSpot(FindClosestGameObject(obstacles));
         Debug.DrawLine(target.transform.position, hidePos, Color.red);
     }
 
@@ -78,5 +56,35 @@ public class Hide : State
             Quaternion rotationOfSpot = Quaternion.AngleAxis(angle, Vector3.forward);
             npc.rb.transform.rotation = rotationOfSpot;
         }
+    }
+    private Vector3 FindHideSpot(Transform obs)
+    {
+        Debug.DrawLine(npc.transform.position, obs.position, Color.white);
+        //Debug.DrawLine(target.transform.position,currentObstacle.transform.position,Color.red);
+        float distanceFromColider = 7f;
+        Vector3 direction = obs.position - target.transform.position;
+        direction.Normalize();
+        return obs.position + direction * distanceFromColider;
+    }
+
+    private Transform FindClosestGameObject(GameObject[] objs) 
+    {
+
+        Transform closestObstacle = null;
+        float minDist = Mathf.Infinity;
+
+        for (int i = 0; i < objs.Length; i++)
+        {
+            Vector3 distanceToObstacle = closeRangeNPC.transform.position - objs[i].transform.position;
+
+            //TODO && camera not in sight and opposite direction of the player 
+            if (distanceToObstacle.magnitude < shortestDistaceToObstacle.magnitude)
+            {
+                shortestDistaceToObstacle = closeRangeNPC.transform.position - objs[i].transform.position;
+                closestObstacle = objs[i].transform;
+                Debug.Log(closestObstacle.name);
+            }
+        }
+        return closestObstacle;
     }
 }

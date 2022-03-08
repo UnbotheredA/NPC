@@ -12,6 +12,8 @@ public class NPC : MonoBehaviour
 
     public Vector2 heading;
     public Vector3 targetPos;
+    //how far they can detect ahead
+    public float lookAhead;
 
     public Rigidbody2D rb;
 
@@ -58,14 +60,11 @@ public class NPC : MonoBehaviour
     {
         //heading is where you want to go or where the forces are pushing you
         //direction is what your facing
-        //heading is a direction to the target the npc is moving too but based on velocity     
-        //heading = transform.position + Vector3.Normalize(rb.velocity) * 10;
-
-        //heading = transform.TransformDirection(targetPos);
         heading = targetPos - transform.position;
-        Vector3 directions = transform.position, heading;
+        lookAhead = speed * 2;
+     
         //Debug.Log(directions);
-        Debug.DrawLine(this.transform.position, directions, Color.grey);
+        Debug.DrawLine(this.transform.position, transform.position + transform.right * (speed + lookAhead), Color.grey);
 
         if (movementSM != null && movementSM.CurrentState != null)
         {
