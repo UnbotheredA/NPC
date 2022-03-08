@@ -5,10 +5,10 @@ using UnityEngine;
 public class Chase : State
 {
     private Transform target;
-  
-    private Rigidbody2D rigidbody2D;
+
+    //private Rigidbody2D rigidbody2D;
     private GameObject closeRangeNPC;
-   
+
     public Chase(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
     {
 
@@ -22,9 +22,9 @@ public class Chase : State
         target = GameObject.Find("Trigger").transform;
         closeRangeNPC = GameObject.Find("OfficalCloseRangeNPC");
         //closeRangeNPC.GetComponent<Collider2D>().isTrigger = false;
-        rigidbody2D = npc.GetComponent<Rigidbody2D>();
+       // rigidbody2D = npc.GetComponent<Rigidbody2D>();
         //This line is causing issuess for far range
-        rigidbody2D.bodyType = RigidbodyType2D.Dynamic; ;
+        //rigidbody2D.bodyType = RigidbodyType2D.Dynamic; ;
         Debug.Log("Chase state");
     }
     //basically since the close range npc is the only npc that gets to the player its postion will be 3 but the far range will still be patrolling
@@ -37,7 +37,7 @@ public class Chase : State
             float distance = Vector3.Distance(npc.transform.position, target.transform.position);
             if (distance <= 3f)
             {
-                rigidbody2D.bodyType = RigidbodyType2D.Kinematic; 
+               // rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
                 stateMachine.ChangeState(npc.attack);
             }
             //if we did not have this npc will only go back to patrol if attack state is active
@@ -51,14 +51,17 @@ public class Chase : State
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        if (target && npc && rigidbody2D != null)
+        if (target && npc && npc.rb != null)
         {
+
             //face the player when chasing the player
             Vector3 playerDirection = (target.transform.position - npc.transform.position).normalized;
-            rigidbody2D.MovePosition(npc.transform.position + playerDirection * npc.speed * Time.deltaTime);
+            npc.targetPos = npc.transform.position + playerDirection * npc.speed * Time.deltaTime;
+            //rigidbody2D.MovePosition(npc.transform.position + playerDirection * npc.speed * Time.deltaTime);
+            npc.rb.MovePosition(npc.targetPos);
             float angle = Mathf.Atan2(playerDirection.y, playerDirection.x) * Mathf.Rad2Deg;
             Quaternion rotationOfPlayer = Quaternion.AngleAxis(angle, Vector3.forward);
-            rigidbody2D.transform.rotation = rotationOfPlayer;
+            npc.rb.transform.rotation = rotationOfPlayer;
         }
     }
 }

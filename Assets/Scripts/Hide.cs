@@ -7,12 +7,13 @@ public class Hide : State
     GameObject closeRangeNPC;
     GameObject target;
     GameObject currentObstacle;
-    Rigidbody2D rbody;
+    //Rigidbody2D rbody;
 
     GameObject[] obstacles;
 
     Vector3 shortestDistaceToObstacle;
     Vector3 oppositeDirectionOfPlayer;
+    Vector3 hidePos;
     public Hide(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
     {
 
@@ -23,7 +24,7 @@ public class Hide : State
         base.Enter();
         target = GameObject.Find("Trigger");
         closeRangeNPC = GameObject.Find("OfficalCloseRangeNPC");
-        rbody = closeRangeNPC.GetComponent<Rigidbody2D>();
+        //rbody = closeRangeNPC.GetComponent<Rigidbody2D>();
         obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
         shortestDistaceToObstacle = new Vector3(-1000, -1000, 0);
         oppositeDirectionOfPlayer = new Vector3(1000, 1000, 1000);
@@ -40,9 +41,14 @@ public class Hide : State
     {
         base.LogicUpdate();
 
+        Transform closestObstacle;
+        float minDist = Mathf.Infinity;
+
         for (int i = 0; i < obstacles.Length; i++)
         {
+
             Vector3 distanceToObstacle = closeRangeNPC.transform.position - obstacles[i].transform.position;
+
             //TODO && camera not in sight and opposite direction of the player 
             if (distanceToObstacle.magnitude < shortestDistaceToObstacle.magnitude)
             {
@@ -51,14 +57,26 @@ public class Hide : State
                 Debug.Log(currentObstacle.name);
             }
         }
+        Debug.DrawLine(npc.transform.position, currentObstacle.transform.position, Color.white);
+        //Debug.DrawLine(target.transform.position,currentObstacle.transform.position,Color.red);
+        float distanceFromColider = 7f;
+        Vector3 direction = currentObstacle.transform.position - target.transform.position;
+        direction.Normalize();
+        hidePos = currentObstacle.transform.position + direction * distanceFromColider;
+        Debug.DrawLine(target.transform.position, hidePos, Color.red);
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        if (rbody && currentObstacle && target != null)
+        if (npc.rb && currentObstacle && target != null)
         {
-            rbody.MovePosition(rbody.transform.position + currentObstacle.transform.position * npc.speed * Time.deltaTime);
+            //face the hiding spot when hiding from the player
+            Vector3 spotDirection = (hidePos - npc.transform.position).normalized;
+            npc.rb.MovePosition(npc.transform.position + spotDirection * npc.speed * Time.deltaTime);
+            float angle = Mathf.Atan2(spotDirection.y, spotDirection.x) * Mathf.Rad2Deg;
+            Quaternion rotationOfSpot = Quaternion.AngleAxis(angle, Vector3.forward);
+            npc.rb.transform.rotation = rotationOfSpot;
         }
     }
 }

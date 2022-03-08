@@ -10,7 +10,10 @@ public class NPC : MonoBehaviour
     public float removeHealthBy = 7;
     public float speed = 3;
 
-    private Rigidbody2D rb;
+    public Vector2 heading;
+    public Vector3 targetPos;
+
+    public Rigidbody2D rb;
 
     public Waypoint waypoint;
 
@@ -20,13 +23,13 @@ public class NPC : MonoBehaviour
     public StateMachine movementSM;
 
     public Chase chase;
-    
+
     public Patrol patrol;
-    
+
     public Attack attack;
 
     public Hide hide;
-    void Start()
+    public virtual void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         movementSM = new StateMachine();
@@ -36,6 +39,7 @@ public class NPC : MonoBehaviour
         hide = new Hide(this, movementSM);
         movementSM.Initialize(patrol);
         InitializeWayPoint();
+        //Debug.Log("npc start class");
     }
     public void InitializeWayPoint()
     {
@@ -50,16 +54,27 @@ public class NPC : MonoBehaviour
         health -= removeHealthBy;
     }
 
-    private void Update()
+    public virtual void Update()
     {
+        //heading is where you want to go or where the forces are pushing you
+        //direction is what your facing
+        //heading is a direction to the target the npc is moving too but based on velocity     
+        //heading = transform.position + Vector3.Normalize(rb.velocity) * 10;
+
+        //heading = transform.TransformDirection(targetPos);
+        heading = targetPos - transform.position;
+        Vector3 directions = transform.position, heading;
+        //Debug.Log(directions);
+        Debug.DrawLine(this.transform.position, directions, Color.grey);
+
         if (movementSM != null && movementSM.CurrentState != null)
         {
             movementSM.CurrentState.LogicUpdate();
-            //Debug.Log(patrol.waypoint);
+            //Debug.Log(patrol.waypoint + "Waypoints");
             //CheckNPCHealth();
         }
     }
-    private void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         if (movementSM != null && movementSM.CurrentState != null)
         {
@@ -98,4 +113,6 @@ public class NPC : MonoBehaviour
             }
         }
     }
+
+
 }

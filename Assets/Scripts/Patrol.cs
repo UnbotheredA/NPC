@@ -11,12 +11,10 @@ public class Patrol : State
 
     private GameObject farRangeNPC;
 
-    private Rigidbody2D rigidbody2D1;
-
     //TODO make it so that if the npc is returing from attack or chase state to not use patrol speed but npc default speed
     public Patrol(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
     {
-        //check if a spesfic npcs is a spesfic state and if so do this.
+        
     }
     public override void Enter()
     {
@@ -25,6 +23,7 @@ public class Patrol : State
         farRangeNPC = GameObject.Find("FarRangeNPC");
         closeRangeNPC = GameObject.Find("OfficalCloseRangeNPC");
         target = GameObject.Find("Trigger").transform;
+        npc.rb.bodyType = RigidbodyType2D.Dynamic; ;
         //this line is causing the problem.
         //closeRangeNPC.GetComponent<BoxCollider2D>().isTrigger = true;
 
@@ -48,10 +47,15 @@ public class Patrol : State
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        if (waypoint && npc != null)
+        if (waypoint && npc && npc.rb != null)
         {
-            npc.transform.position = Vector2.MoveTowards(npc.transform.position, waypoint.transform.position, npc.speed * Time.deltaTime);
-            npc.transform.rotation = Quaternion.identity;
+            Vector3 waypointDirection = (waypoint.transform.position - npc.transform.position).normalized;
+            npc.targetPos = npc.transform.position + waypointDirection * npc.speed * Time.deltaTime;
+            //rigidbody2D.MovePosition(npc.transform.position + playerDirection * npc.speed * Time.deltaTime);
+            npc.rb.MovePosition(npc.targetPos);
+            float angle = Mathf.Atan2(waypointDirection.y, waypointDirection.x) * Mathf.Rad2Deg;
+            Quaternion rotationOfWaypoint = Quaternion.AngleAxis(angle, Vector3.forward);
+            npc.rb.transform.rotation = rotationOfWaypoint;
         }
     }
 }

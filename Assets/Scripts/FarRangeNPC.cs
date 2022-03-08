@@ -8,17 +8,22 @@ public class FarRangeNPC : NPC
     public float speedOfBullet = 3f;
 
     // Start is called before the first frame update
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         //This can be done on the enter method
         //StartCoroutine(Attack());
     }
 
     //Update is called once per frame
-    void Update()
+    public override void Update()
     {
-      
+        base.Update();
 
+    }
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
     }
     IEnumerator Attack()
     {

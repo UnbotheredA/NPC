@@ -2,26 +2,33 @@ using UnityEngine;
 
 public class CloseRangeNPC : NPC
 {
-    Rigidbody2D rbody;
-  
-    NPC npc;
-  
-    private void Start()
+    public override void Start()
     {
-        rbody = GetComponent<Rigidbody2D>();
+        base.Start();
+        //rbody = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+    public override void Update()
+    {
+        base.Update();
+    }
+
+    public override void FixedUpdate()
+    {
+        base.FixedUpdate();
+    }
+
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.collider.GetComponent<PlayerMove>())
         {
-            if (rbody && npc != null)
+            //rbody
+            if (rb != null)
             {
-                npc.speed = 0;
+                speed = 0;
                 Debug.Log(speed);
                 Debug.Log("collision has happened");
-                rbody.bodyType = RigidbodyType2D.Kinematic;
+                rb.bodyType = RigidbodyType2D.Kinematic;
             }
         }
     }
@@ -29,10 +36,10 @@ public class CloseRangeNPC : NPC
     {
         if (collision.collider.GetComponent<PlayerMove>())
         {
-            if (rbody && npc != null)
+            if (rb  != null)
             {
-                rbody.bodyType = RigidbodyType2D.Dynamic;
-                npc.speed = 3;
+                rb.bodyType = RigidbodyType2D.Dynamic;
+                speed = 3;
             }
         }
     }

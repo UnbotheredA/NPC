@@ -11,7 +11,7 @@ public class Attack : State
 
     private float bulletTimer = 1;
 
-    private Rigidbody2D rigidbody2D;
+    //private Rigidbody2D rigidbody2D;
 
     public Attack(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
     {
@@ -23,13 +23,13 @@ public class Attack : State
         npc.speed = 5;
         closeRangeNPC = GameObject.Find("OfficalCloseRangeNPC");
         Debug.Log(closeRangeNPC);
-        rigidbody2D = closeRangeNPC.GetComponent<Rigidbody2D>();
-        rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+        //rigidbody2D = closeRangeNPC.GetComponent<Rigidbody2D>();
+        //rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
         closeRangeNPC.GetComponent<BoxCollider2D>().isTrigger = false;
         //closeRangeNPCS = GameObject.FindGameObjectsWithTag("CloseRangeEnemy");
         farRangeNPC = GameObject.Find("FarRangeTest");
         target = GameObject.Find("Trigger").transform;
-        rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+        //rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
         Debug.Log("Here on the attack state ");
     }
     public override void LogicUpdate()
@@ -41,9 +41,9 @@ public class Attack : State
             if (distance > 6)
             {
                 //this if statement will never be true untill both npcs are > six??
-                rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+                //rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
                 //so npc stops rotating towards players rotation when going back to patrol
-                rigidbody2D.transform.rotation = Quaternion.identity;
+                //rigidbody2D.transform.rotation = Quaternion.identity;
                 Debug.Log(npc.name + "is further than 6 so needs to go patrol");
                 Debug.Log("exit attack");
                 stateMachine.ChangeState(npc.patrol);
@@ -71,10 +71,10 @@ public class Attack : State
     private void CloseRangeAttack()
     {
         Vector3 playerDirection = (target.transform.position - npc.transform.position).normalized;
-        rigidbody2D.MovePosition(closeRangeNPC.transform.position + playerDirection * npc.speed * Time.deltaTime);
+        npc.rb.MovePosition(closeRangeNPC.transform.position + playerDirection * npc.speed * Time.deltaTime);
         float angle = Mathf.Atan2(playerDirection.y, playerDirection.x) * Mathf.Rad2Deg;
         var rotationOfPlayer = Quaternion.AngleAxis(angle, Vector3.forward);
-        rigidbody2D.transform.rotation = rotationOfPlayer;
+        npc.rb.transform.rotation = rotationOfPlayer;
     }
 
     //TODO sometimes it seems like the npc shoots two bullets at a time or just once at a time

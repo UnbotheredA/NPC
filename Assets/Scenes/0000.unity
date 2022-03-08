@@ -328,6 +328,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextWaypoint: {fileID: 643144346}
+  randomWaypoint: 0
+  allWaypoints: []
 --- !u!212 &195495611
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -975,6 +977,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1314291936065999511, guid: f002457736123794c9f6436f21ea97e6, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 1763120550}
+    - target: {fileID: 1314291936065999511, guid: f002457736123794c9f6436f21ea97e6, type: 3}
       propertyPath: speed
       value: 3
       objectReference: {fileID: 0}
@@ -986,6 +992,7 @@ PrefabInstance:
     - {fileID: 394869921392050830, guid: f002457736123794c9f6436f21ea97e6, type: 3}
     - {fileID: 394869921392050816, guid: f002457736123794c9f6436f21ea97e6, type: 3}
     - {fileID: 394869921392050825, guid: f002457736123794c9f6436f21ea97e6, type: 3}
+    - {fileID: 145238341356844906, guid: f002457736123794c9f6436f21ea97e6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f002457736123794c9f6436f21ea97e6, type: 3}
 --- !u!1 &364378591
 GameObject:
@@ -1046,7 +1053,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 37203e391fa6f6e49a1385012f504fe2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5c6848c70eff9694d8f89f2fb3825d37, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1054,7 +1061,7 @@ SpriteRenderer:
   m_Size: {x: 12.07, y: 11.81}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &364378593
@@ -1065,7 +1072,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 364378591}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.1, y: -2.574, z: 0}
+  m_LocalPosition: {x: 37.1, y: -6.9, z: 0}
   m_LocalScale: {x: 0.31094122, y: 0.26255345, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1082,7 +1089,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 6200000, guid: f414f6e7f16bdb14b96d7c9a256da8f7, type: 2}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1407,6 +1414,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextWaypoint: {fileID: 1239588415}
+  randomWaypoint: 0
+  allWaypoints: []
 --- !u!212 &643144347
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1718,6 +1727,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &948808627 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 260431230, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
+  m_PrefabInstance: {fileID: 8021046289717915969}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &980958609
 GameObject:
   m_ObjectHideFlags: 0
@@ -2021,6 +2035,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextWaypoint: {fileID: 195495610}
+  randomWaypoint: 0
+  allWaypoints: []
 --- !u!212 &1239588417
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2436,7 +2452,11 @@ MonoBehaviour:
   health: 10
   removeHealthBy: 7
   speed: 5
+  heading: {x: 0, y: 0}
+  targetPos: {x: 0, y: 0, z: 0}
+  rb: {fileID: 0}
   waypoint: {fileID: 195495610}
+  randomWaypoint: 0
 --- !u!114 &1494640835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2452,7 +2472,11 @@ MonoBehaviour:
   health: 10
   removeHealthBy: 7
   speed: 5
+  heading: {x: 0, y: 0}
+  targetPos: {x: 0, y: 0, z: 0}
+  rb: {fileID: 0}
   waypoint: {fileID: 195495610}
+  randomWaypoint: 0
   bullet: {fileID: 2441536988057660725, guid: f474a093dc5626e4b88180ee1c375fc7, type: 3}
   speedOfBullet: 3
 --- !u!61 &1494640836
@@ -3064,7 +3088,7 @@ GameObject:
   - component: {fileID: 1798109400}
   m_Layer: 0
   m_Name: OfficalTree (2)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3615,6 +3639,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextWaypoint: {fileID: 643144346}
+  randomWaypoint: 0
+  allWaypoints: []
 --- !u!212 &2046169994
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3778,6 +3804,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 260431229, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 948808627}
+    - target: {fileID: 260431229, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
       propertyPath: waypoint
       value: 
       objectReference: {fileID: 195495610}
@@ -3833,5 +3863,6 @@ PrefabInstance:
       propertyPath: waypoint
       value: 
       objectReference: {fileID: 195495610}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7877788171404092971, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}

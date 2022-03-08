@@ -1,3 +1,4 @@
+using UnityEngine;
 public class StateMachine
 {
     // this class will will keep track of the current state of the state machine
@@ -6,7 +7,7 @@ public class StateMachine
     {
         CurrentState = startingState;
         startingState.Enter();
-        //Debug.Log("The starting state: " + startingState.ToString());
+        Debug.Log("The starting state: " + startingState.ToString());
     }
 
     public void ChangeState(State newState)
