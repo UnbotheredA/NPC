@@ -40,8 +40,36 @@ public class Hide : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        hidePos = FindHideSpot(FindClosestGameObject(obstacles));
+        //hidePos = FindHideSpot(FindClosestGameObject(obstacles));
+        //Debug.DrawLine(target.transform.position, hidePos, Color.red);
+        Transform closestObstacle;
+        float minDist = Mathf.Infinity;
+
+        for (int i = 0; i < obstacles.Length; i++)
+        {
+
+            Vector3 distanceToObstacle = closeRangeNPC.transform.position - obstacles[i].transform.position;
+
+            if (distanceToObstacle.magnitude < shortestDistaceToObstacle.magnitude)
+            {
+                shortestDistaceToObstacle = closeRangeNPC.transform.position - obstacles[i].transform.position;
+                currentObstacle = obstacles[i];
+                //Debug.Log(currentObstacle.name);
+            }
+        }
+
+        Debug.DrawLine(npc.transform.position, currentObstacle.transform.position, Color.white);
+        //Debug.DrawLine(target.transform.position,currentObstacle.transform.position,Color.red);
+        float distanceFromColider = 4f;
+        Vector3 direction = currentObstacle.transform.position - target.transform.position;
+        direction.Normalize();
+        hidePos = currentObstacle.transform.position + direction * distanceFromColider;
         Debug.DrawLine(target.transform.position, hidePos, Color.red);
+        npc.isLeft = npc.Intersect(npc.point_left,currentObstacle);
+        npc.isRight = npc.Intersect(npc.point_right,currentObstacle);
+        npc.isMiddle = npc.Intersect(npc.point_forward,currentObstacle);
+        Debug.Log(npc.isLeft + " " + npc.isMiddle + " " + npc.isRight);
+        
     }
 
     public override void PhysicsUpdate()
@@ -57,17 +85,23 @@ public class Hide : State
             npc.rb.transform.rotation = rotationOfSpot;
         }
     }
+
+    public void FindObjectandMoveToIt()
+    {
+
+    }
     private Vector3 FindHideSpot(Transform obs)
     {
-        Debug.DrawLine(npc.transform.position, obs.position, Color.white);
+        //Debug.DrawLine(npc.transform.position, obs.position, Color.white);
         //Debug.DrawLine(target.transform.position,currentObstacle.transform.position,Color.red);
         float distanceFromColider = 7f;
+        //Debug.Log(obs.position);
         Vector3 direction = obs.position - target.transform.position;
         direction.Normalize();
         return obs.position + direction * distanceFromColider;
     }
 
-    private Transform FindClosestGameObject(GameObject[] objs) 
+    private Transform FindClosestGameObject(GameObject[] objs)
     {
 
         Transform closestObstacle = null;

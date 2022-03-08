@@ -13,9 +13,20 @@ public class NPC : MonoBehaviour
     public Vector2 heading;
     public Vector3 targetPos;
     //how far they can detect ahead
-    public float lookAhead;
+    public float lookAhead = 1;
+    
+    public bool isLeft;
+    public bool isRight;
+    public bool isMiddle;
+
+
+    public Vector3 point_forward;
+    public Vector3 point_left;
+    public Vector3 point_right;
+
 
     public Rigidbody2D rb;
+
 
     public Waypoint waypoint;
 
@@ -61,10 +72,17 @@ public class NPC : MonoBehaviour
         //heading is where you want to go or where the forces are pushing you
         //direction is what your facing
         heading = targetPos - transform.position;
-        lookAhead = speed * 2;
-     
-        //Debug.Log(directions);
-        Debug.DrawLine(this.transform.position, transform.position + transform.right * (speed + lookAhead), Color.grey);
+        //lookAhead = 1;
+
+        var fwd = transform.right * (lookAhead);
+
+        point_forward = transform.position + fwd;
+        point_left = Quaternion.AngleAxis(-45, -transform.forward) * fwd;
+        point_right = Quaternion.AngleAxis(45, -transform.forward) * fwd;
+
+        Debug.DrawLine(transform.position, point_forward, Color.grey);
+        Debug.DrawLine(transform.position, transform.position + point_left, Color.cyan);
+        Debug.DrawLine(transform.position, transform.position + point_right, Color.magenta);
 
         if (movementSM != null && movementSM.CurrentState != null)
         {
@@ -72,6 +90,12 @@ public class NPC : MonoBehaviour
             //Debug.Log(patrol.waypoint + "Waypoints");
             //CheckNPCHealth();
         }
+    }
+
+    public bool Intersect(Vector3 point, GameObject circle)
+    {
+        float radius = 3f;
+        return Vector3.Distance(circle.transform.position, point) <= radius;
     }
     public virtual void FixedUpdate()
     {
