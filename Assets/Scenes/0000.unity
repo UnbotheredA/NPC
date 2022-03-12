@@ -328,8 +328,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextWaypoint: {fileID: 643144346}
-  randomWaypoint: 0
-  allWaypoints: []
 --- !u!212 &195495611
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -988,6 +986,10 @@ PrefabInstance:
       propertyPath: waypoint
       value: 
       objectReference: {fileID: 1239588415}
+    - target: {fileID: 1314291936065999511, guid: f002457736123794c9f6436f21ea97e6, type: 3}
+      propertyPath: lookAhead
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 394869921392050830, guid: f002457736123794c9f6436f21ea97e6, type: 3}
     - {fileID: 394869921392050816, guid: f002457736123794c9f6436f21ea97e6, type: 3}
@@ -1414,8 +1416,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextWaypoint: {fileID: 1239588415}
-  randomWaypoint: 0
-  allWaypoints: []
 --- !u!212 &643144347
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2035,8 +2035,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextWaypoint: {fileID: 195495610}
-  randomWaypoint: 0
-  allWaypoints: []
 --- !u!212 &1239588417
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2454,9 +2452,15 @@ MonoBehaviour:
   speed: 5
   heading: {x: 0, y: 0}
   targetPos: {x: 0, y: 0, z: 0}
+  lookAhead: 0
+  isLeft: 0
+  isRight: 0
+  isMiddle: 0
+  point_forward: {x: 0, y: 0, z: 0}
+  point_left: {x: 0, y: 0, z: 0}
+  point_right: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   waypoint: {fileID: 195495610}
-  randomWaypoint: 0
 --- !u!114 &1494640835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2474,9 +2478,15 @@ MonoBehaviour:
   speed: 5
   heading: {x: 0, y: 0}
   targetPos: {x: 0, y: 0, z: 0}
+  lookAhead: 0
+  isLeft: 0
+  isRight: 0
+  isMiddle: 0
+  point_forward: {x: 0, y: 0, z: 0}
+  point_left: {x: 0, y: 0, z: 0}
+  point_right: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   waypoint: {fileID: 195495610}
-  randomWaypoint: 0
   bullet: {fileID: 2441536988057660725, guid: f474a093dc5626e4b88180ee1c375fc7, type: 3}
   speedOfBullet: 3
 --- !u!61 &1494640836
@@ -3639,8 +3649,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextWaypoint: {fileID: 643144346}
-  randomWaypoint: 0
-  allWaypoints: []
 --- !u!212 &2046169994
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3811,6 +3819,10 @@ PrefabInstance:
       propertyPath: waypoint
       value: 
       objectReference: {fileID: 195495610}
+    - target: {fileID: 260431229, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
+      propertyPath: lookAhead
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7650110552412820416, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
       propertyPath: m_Name
       value: FarRangeTest
