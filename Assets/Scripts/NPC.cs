@@ -77,12 +77,12 @@ public class NPC : MonoBehaviour
         var fwd = transform.right * (lookAhead);
 
         point_forward = transform.position + fwd;
-        point_left = Quaternion.AngleAxis(-45, -transform.forward) * fwd;
-        point_right = Quaternion.AngleAxis(45, -transform.forward) * fwd;
+        point_left =  transform.position + Quaternion.AngleAxis(-45, -transform.forward) * fwd;
+        point_right = transform.position + Quaternion.AngleAxis(45, -transform.forward) * fwd;
 
         Debug.DrawLine(transform.position, point_forward, Color.grey);
-        Debug.DrawLine(transform.position, transform.position + point_left, Color.cyan);
-        Debug.DrawLine(transform.position, transform.position + point_right, Color.magenta);
+        Debug.DrawLine(transform.position, point_left, Color.cyan);
+        Debug.DrawLine(transform.position, point_right, Color.magenta);
 
         if (movementSM != null && movementSM.CurrentState != null)
         {
@@ -91,10 +91,13 @@ public class NPC : MonoBehaviour
             //CheckNPCHealth();
         }
     }
-
+    //point is the end of the line touching the circle
+    //circle is the object that you want to avoid
     public bool Intersect(Vector3 point, GameObject circle)
     {
+        //How big is the detection area
         float radius = 3f;
+        //pos is the middle of the collider 
         return Vector3.Distance(circle.transform.position, point) <= radius;
     }
     public virtual void FixedUpdate()
