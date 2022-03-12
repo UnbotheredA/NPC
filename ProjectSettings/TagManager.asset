@@ -10,6 +10,7 @@ TagManager:
   - Obstacle
   - Ground
   - Pickup
+  - Waypoint
   layers:
   - Default
   - TransparentFX

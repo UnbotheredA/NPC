@@ -51,7 +51,6 @@ public class Patrol : State
         {
             Vector3 waypointDirection = (waypoint.transform.position - npc.transform.position).normalized;
             npc.targetPos = npc.transform.position + waypointDirection * npc.speed * Time.deltaTime;
-            //rigidbody2D.MovePosition(npc.transform.position + playerDirection * npc.speed * Time.deltaTime);
             npc.rb.MovePosition(npc.targetPos);
             float angle = Mathf.Atan2(waypointDirection.y, waypointDirection.x) * Mathf.Rad2Deg;
             Quaternion rotationOfWaypoint = Quaternion.AngleAxis(angle, Vector3.forward);

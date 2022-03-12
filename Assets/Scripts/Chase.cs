@@ -5,10 +5,6 @@ using UnityEngine;
 public class Chase : State
 {
     private Transform target;
-
-    //private Rigidbody2D rigidbody2D;
-    private GameObject closeRangeNPC;
-
     public Chase(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
     {
 
@@ -20,12 +16,6 @@ public class Chase : State
         base.Enter();
         npc.speed = 4;
         target = GameObject.Find("Trigger").transform;
-        closeRangeNPC = GameObject.Find("OfficalCloseRangeNPC");
-        //closeRangeNPC.GetComponent<Collider2D>().isTrigger = false;
-       // rigidbody2D = npc.GetComponent<Rigidbody2D>();
-        //This line is causing issuess for far range
-        //rigidbody2D.bodyType = RigidbodyType2D.Dynamic; ;
-        Debug.Log("Chase state");
     }
     //basically since the close range npc is the only npc that gets to the player its postion will be 3 but the far range will still be patrolling
     //but when attack is true the far range will shoot and rotate towards the players pos because the shoot method is called on the phyics update of attack state
@@ -38,7 +28,7 @@ public class Chase : State
             if (distance <= 3f)
             {
                // rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
-                stateMachine.ChangeState(npc.attack);
+                //stateMachine.ChangeState(npc.attack);
             }
             //if we did not have this npc will only go back to patrol if attack state is active
             else if (distance > 10)

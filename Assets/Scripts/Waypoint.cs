@@ -3,6 +3,7 @@ using UnityEngine;
 public class Waypoint : MonoBehaviour
 {
     public Waypoint nextWaypoint;
+
     private void Awake()
     {
 
@@ -17,7 +18,9 @@ public class Waypoint : MonoBehaviour
         if (npcs != null)
         {
             npcs.NewWaypoint(nextWaypoint);
+            //Debug.Log(newWaypoint);
         }
     }
 }
+
 

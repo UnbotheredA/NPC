@@ -1,11 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
     // this script needs to be attached to NPC to update state
-    //These NPC do not have to have actual bars.
 
-    //Turn this to protected after debugging
+    //Turn this to protected after debugging;
     public float health = 10;
     public float removeHealthBy = 7;
     public float speed = 3;
@@ -14,7 +14,7 @@ public class NPC : MonoBehaviour
     public Vector3 targetPos;
     //how far they can detect ahead
     public float lookAhead = 1;
-    
+
     public bool isLeft;
     public bool isRight;
     public bool isMiddle;
@@ -24,11 +24,10 @@ public class NPC : MonoBehaviour
     public Vector3 point_left;
     public Vector3 point_right;
 
-
     public Rigidbody2D rb;
 
-
     public Waypoint waypoint;
+    public List<Waypoint> waypoints;
 
     //public GameObject playerMove;
     //TODO Instead of creating a target varaible in all the classess that need it. Initialze the value here one time and accesss it using NPC.
@@ -44,6 +43,11 @@ public class NPC : MonoBehaviour
     public Hide hide;
     public virtual void Start()
     {
+        GameObject[] waypointsArray = GameObject.FindGameObjectsWithTag("Waypoint");
+        foreach (var item in waypointsArray)
+        {
+            waypoints.Add(item.GetComponent<Waypoint>());
+        }
         rb = gameObject.GetComponent<Rigidbody2D>();
         movementSM = new StateMachine();
         patrol = new Patrol(this, movementSM);
@@ -60,7 +64,13 @@ public class NPC : MonoBehaviour
     }
     public void NewWaypoint(Waypoint wp)
     {
-        patrol.UpdateWaypoint(wp);
+        Waypoint currentWaypoint = patrol.waypoint;
+        Waypoint newWaypoint = null;
+        List<Waypoint> availableWaypoints = new List<Waypoint>(waypoints);
+        availableWaypoints.Remove(currentWaypoint);
+        int random = Random.Range(0, availableWaypoints.Count);
+        newWaypoint = availableWaypoints[random];
+        patrol.UpdateWaypoint(newWaypoint);
     }
     public void TakeDamage()
     {
@@ -77,7 +87,7 @@ public class NPC : MonoBehaviour
         var fwd = transform.right * (lookAhead);
 
         point_forward = transform.position + fwd;
-        point_left =  transform.position + Quaternion.AngleAxis(-45, -transform.forward) * fwd;
+        point_left = transform.position + Quaternion.AngleAxis(-45, -transform.forward) * fwd;
         point_right = transform.position + Quaternion.AngleAxis(45, -transform.forward) * fwd;
 
         Debug.DrawLine(transform.position, point_forward, Color.grey);
@@ -122,23 +132,16 @@ public class NPC : MonoBehaviour
         if (col.collider.GetComponent<PlayerMove>())
         {
             speed = 0;
-            if (rb != null)
-            {
-                rb.bodyType = RigidbodyType2D.Kinematic;
-            }
+
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.GetComponent<PlayerMove>())
         {
-            if (rb != null)
-            {
-                rb.bodyType = RigidbodyType2D.Dynamic;
-                speed = 3;
-            }
+            speed = 3;
+
         }
     }
-
-
 }
+

@@ -47,7 +47,6 @@ public class Hide : State
 
         for (int i = 0; i < obstacles.Length; i++)
         {
-
             Vector3 distanceToObstacle = closeRangeNPC.transform.position - obstacles[i].transform.position;
 
             if (distanceToObstacle.magnitude < shortestDistaceToObstacle.magnitude)
@@ -69,7 +68,6 @@ public class Hide : State
         npc.isRight = npc.Intersect(npc.point_right,currentObstacle);
         npc.isMiddle = npc.Intersect(npc.point_forward,currentObstacle);
         Debug.Log(npc.isLeft + " " + npc.isMiddle + " " + npc.isRight);
-        
     }
 
     public override void PhysicsUpdate()

@@ -5,7 +5,6 @@ public class CloseRangeNPC : NPC
     public override void Start()
     {
         base.Start();
-        //rbody = GetComponent<Rigidbody2D>();
     }
 
     public override void Update()
@@ -28,7 +27,6 @@ public class CloseRangeNPC : NPC
                 speed = 0;
                 Debug.Log(speed);
                 Debug.Log("collision has happened");
-                rb.bodyType = RigidbodyType2D.Kinematic;
             }
         }
     }
@@ -36,11 +34,7 @@ public class CloseRangeNPC : NPC
     {
         if (collision.collider.GetComponent<PlayerMove>())
         {
-            if (rb  != null)
-            {
-                rb.bodyType = RigidbodyType2D.Dynamic;
-                speed = 3;
-            }
+            speed = 3;
         }
     }
 }
