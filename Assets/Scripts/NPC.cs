@@ -9,24 +9,23 @@ public class NPC : MonoBehaviour
     public float health = 10;
     public float removeHealthBy = 7;
     public float speed = 3;
+    public float patrolSpeed = 1;
+    public float hideSpeed = 7;
+    public float chaseSpeed = 4;
+    public float stopSpeed = 0;
+    public float preivousSpeed = 0;
+    public float attackSpeed = 5;
+
 
     public Vector2 heading;
     public Vector3 targetPos;
     //how far they can detect ahead
     public float lookAhead = 1;
 
-    public bool isLeft;
-    public bool isRight;
-    public bool isMiddle;
-
-
-    public Vector3 point_forward;
-    public Vector3 point_left;
-    public Vector3 point_right;
-
     public Rigidbody2D rb;
 
     public Waypoint waypoint;
+
     public List<Waypoint> waypoints;
 
     //public GameObject playerMove;
@@ -41,6 +40,8 @@ public class NPC : MonoBehaviour
     public Attack attack;
 
     public Hide hide;
+
+    public bool isRandom;
     public virtual void Start()
     {
         GameObject[] waypointsArray = GameObject.FindGameObjectsWithTag("Waypoint");
@@ -64,13 +65,20 @@ public class NPC : MonoBehaviour
     }
     public void NewWaypoint(Waypoint wp)
     {
-        Waypoint currentWaypoint = patrol.waypoint;
-        Waypoint newWaypoint = null;
-        List<Waypoint> availableWaypoints = new List<Waypoint>(waypoints);
-        availableWaypoints.Remove(currentWaypoint);
-        int random = Random.Range(0, availableWaypoints.Count);
-        newWaypoint = availableWaypoints[random];
-        patrol.UpdateWaypoint(newWaypoint);
+        if (isRandom == true)
+        {
+            Waypoint currentWaypoint = patrol.waypoint;
+            Waypoint newWaypoint = null;
+            List<Waypoint> availableWaypoints = new List<Waypoint>(waypoints);
+            availableWaypoints.Remove(currentWaypoint);
+            int random = Random.Range(0, availableWaypoints.Count);
+            newWaypoint = availableWaypoints[random];
+            patrol.UpdateWaypoint(newWaypoint);
+        }
+        else
+        {
+            patrol.UpdateWaypoint(wp);
+        }
     }
     public void TakeDamage()
     {
@@ -82,17 +90,8 @@ public class NPC : MonoBehaviour
         //heading is where you want to go or where the forces are pushing you
         //direction is what your facing
         heading = targetPos - transform.position;
-        //lookAhead = 1;
-
+        //decreased lookahead
         var fwd = transform.right * (lookAhead);
-
-        point_forward = transform.position + fwd;
-        point_left = transform.position + Quaternion.AngleAxis(-45, -transform.forward) * fwd;
-        point_right = transform.position + Quaternion.AngleAxis(45, -transform.forward) * fwd;
-
-        Debug.DrawLine(transform.position, point_forward, Color.grey);
-        Debug.DrawLine(transform.position, point_left, Color.cyan);
-        Debug.DrawLine(transform.position, point_right, Color.magenta);
 
         if (movementSM != null && movementSM.CurrentState != null)
         {
@@ -108,6 +107,7 @@ public class NPC : MonoBehaviour
         //How big is the detection area
         float radius = 3f;
         //pos is the middle of the collider 
+        //if a point is less than or equal to the radius intersection has happened
         return Vector3.Distance(circle.transform.position, point) <= radius;
     }
     public virtual void FixedUpdate()
@@ -127,19 +127,24 @@ public class NPC : MonoBehaviour
         }
     }
     //TODO add this to the close range npc
-    void OnCollisionEnter2D(Collision2D col)
+    protected virtual void OnCollisionEnter2D(Collision2D col)
     {
         if (col.collider.GetComponent<PlayerMove>())
         {
-            speed = 0;
+            if (preivousSpeed == 0)
+            {
+                preivousSpeed = speed;
+                speed = stopSpeed;
+            }
 
         }
     }
-    private void OnCollisionExit2D(Collision2D collision)
+    protected virtual void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.GetComponent<PlayerMove>())
         {
-            speed = 3;
+            speed = preivousSpeed;
+            preivousSpeed = 0;
 
         }
     }

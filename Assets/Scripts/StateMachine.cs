@@ -7,7 +7,7 @@ public class StateMachine
     {
         CurrentState = startingState;
         startingState.Enter();
-        Debug.Log("The starting state: " + startingState.ToString());
+        //Debug.Log("The starting state: " + startingState.ToString());
     }
 
     public void ChangeState(State newState)

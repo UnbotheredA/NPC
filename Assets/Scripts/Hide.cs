@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Hide : State
@@ -10,10 +11,11 @@ public class Hide : State
     //Rigidbody2D rbody;
 
     GameObject[] obstacles;
+    List<GameObject> availableObstacles;
 
-    Vector3 shortestDistaceToObstacle;
-    Vector3 oppositeDirectionOfPlayer;
+    //Vector3 shortestDistaceToObstacle;
     Vector3 hidePos;
+    int hideDirection;
     public Hide(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
     {
 
@@ -22,14 +24,16 @@ public class Hide : State
     public override void Enter()
     {
         base.Enter();
+        npc.speed = npc.hideSpeed;
         target = GameObject.Find("Trigger");
         closeRangeNPC = GameObject.Find("OfficalCloseRangeNPC");
-        //rbody = closeRangeNPC.GetComponent<Rigidbody2D>();
         obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-        shortestDistaceToObstacle = new Vector3(-1000, -1000, 0);
-        oppositeDirectionOfPlayer = new Vector3(1000, 1000, 1000);
-        closeRangeNPC.transform.rotation = Quaternion.Inverse(target.transform.rotation);
+        currentObstacle = null;
         Debug.Log("Hide State");
+
+        availableObstacles = obstacles.ToList();
+        availableObstacles.Remove(FindNearestObject(availableObstacles.ToArray()));
+        currentObstacle = FindNearestObject(availableObstacles.ToArray());
     }
 
     public override void Exit()
@@ -41,53 +45,97 @@ public class Hide : State
     {
         base.LogicUpdate();
         //hidePos = FindHideSpot(FindClosestGameObject(obstacles));
-        //Debug.DrawLine(target.transform.position, hidePos, Color.red);
-        Transform closestObstacle;
-        float minDist = Mathf.Infinity;
+        ///Debug.DrawLine(target.transform.position, hidePos, Color.red);
+        ///
+        // finds the closet obstacle so later the npc can move to it
+        //List<GameObject> availableObstacles = obstacles.ToList();
 
-        for (int i = 0; i < obstacles.Length; i++)
+
+        if (currentObstacle != null)
         {
-            Vector3 distanceToObstacle = closeRangeNPC.transform.position - obstacles[i].transform.position;
+            float dist = Vector3.Distance(currentObstacle.transform.position, target.transform.position);
 
-            if (distanceToObstacle.magnitude < shortestDistaceToObstacle.magnitude)
+            if (dist < 6)
             {
-                shortestDistaceToObstacle = closeRangeNPC.transform.position - obstacles[i].transform.position;
-                currentObstacle = obstacles[i];
-                //Debug.Log(currentObstacle.name);
+                Enter();
             }
         }
 
+        //currentObstacle = FindNearestObject(availableObstacles.ToArray());
+
         Debug.DrawLine(npc.transform.position, currentObstacle.transform.position, Color.white);
-        //Debug.DrawLine(target.transform.position,currentObstacle.transform.position,Color.red);
         float distanceFromColider = 4f;
+        // the point between the current obstacle and the player and making sure to always be further from the target
         Vector3 direction = currentObstacle.transform.position - target.transform.position;
         direction.Normalize();
+        // to go to the current obstacle and move away from player while keeping the distance from collider
         hidePos = currentObstacle.transform.position + direction * distanceFromColider;
         Debug.DrawLine(target.transform.position, hidePos, Color.red);
-        npc.isLeft = npc.Intersect(npc.point_left,currentObstacle);
-        npc.isRight = npc.Intersect(npc.point_right,currentObstacle);
-        npc.isMiddle = npc.Intersect(npc.point_forward,currentObstacle);
-        Debug.Log(npc.isLeft + " " + npc.isMiddle + " " + npc.isRight);
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+
         if (npc.rb && currentObstacle && target != null)
         {
-            //face the hiding spot when hiding from the player
-            Vector3 spotDirection = (hidePos - npc.transform.position).normalized;
-            npc.rb.MovePosition(npc.transform.position + spotDirection * npc.speed * Time.deltaTime);
-            float angle = Mathf.Atan2(spotDirection.y, spotDirection.x) * Mathf.Rad2Deg;
+            Vector3 newPos = (hidePos - npc.transform.position).normalized;
+
+            //instead of hide pos it is target
+            bool right = Vector2.Dot(target.transform.position - npc.rb.transform.position, -npc.rb.transform.up) > 0;
+            bool left = Vector2.Dot(target.transform.position - npc.rb.transform.position, -npc.rb.transform.up) < 0;
+
+            if (left)
+            {
+                hideDirection = 1;
+            }
+            else if (right)
+            {
+                hideDirection = -1;
+            }
+            else
+            {
+                hideDirection = 0;
+            }
+
+            //Debug.LogError(hideDirection);
+
+
+            float angle = Mathf.Atan2(newPos.y, newPos.x) * Mathf.Rad2Deg;
             Quaternion rotationOfSpot = Quaternion.AngleAxis(angle, Vector3.forward);
+            //npc.rb.transform.rotation = Quaternion.Slerp(npc.rb.transform.rotation, rotationOfSpot, Time.deltaTime * 12);
             npc.rb.transform.rotation = rotationOfSpot;
+
+            if (Vector3.Distance(npc.transform.position, hidePos) > 0.5f)
+            {
+                if (Vector3.Distance(npc.transform.position, currentObstacle.transform.position) > 4)
+                {
+
+                    npc.rb.MovePosition(npc.transform.position + newPos * npc.speed * Time.deltaTime);
+                }
+                else
+                {
+                    npc.rb.transform.position = RotatePointAroundPivot(npc.rb.transform.position, currentObstacle.transform.position, Quaternion.Euler(0, 0, hideDirection));
+
+                }
+            }
+            else
+            {
+                npc.rb.velocity = Vector2.zero;
+                npc.rb.constraints = RigidbodyConstraints2D.FreezePositionX;
+                npc.rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+                npc.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+            }
         }
-    }
 
-    public void FindObjectandMoveToIt()
+    }
+    //Make it so that if a tree is occupied the NPC needs to go to another one
+    public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion angle)
     {
-
+        return angle * (point - pivot) + pivot;
     }
+
     private Vector3 FindHideSpot(Transform obs)
     {
         //Debug.DrawLine(npc.transform.position, obs.position, Color.white);
@@ -99,24 +147,43 @@ public class Hide : State
         return obs.position + direction * distanceFromColider;
     }
 
-    private Transform FindClosestGameObject(GameObject[] objs)
+    // find nearest object
+    private GameObject FindNearestObject(GameObject[] allObjects)
     {
-
-        Transform closestObstacle = null;
+        GameObject nearest = null;
         float minDist = Mathf.Infinity;
 
-        for (int i = 0; i < objs.Length; i++)
+        for (int i = 0; i < allObjects.Length; i++)
         {
-            Vector3 distanceToObstacle = closeRangeNPC.transform.position - objs[i].transform.position;
+            Vector3 distanceToObstacle = closeRangeNPC.transform.position - allObjects[i].transform.position;
 
-            //TODO && camera not in sight and opposite direction of the player 
-            if (distanceToObstacle.magnitude < shortestDistaceToObstacle.magnitude)
+            if (distanceToObstacle.sqrMagnitude < minDist)
             {
-                shortestDistaceToObstacle = closeRangeNPC.transform.position - objs[i].transform.position;
-                closestObstacle = objs[i].transform;
-                Debug.Log(closestObstacle.name);
+                minDist = (closeRangeNPC.transform.position - allObjects[i].transform.position).sqrMagnitude;
+                nearest = allObjects[i];
+                //Debug.Log(currentObstacle.name);
             }
         }
-        return closestObstacle;
+        return nearest;
+    }
+
+    // find furtherst object
+    private GameObject FindFurthestObject(GameObject[] allObjects)
+    {
+        GameObject furthest = null;
+        float maxDist = 0;
+
+        for (int i = 0; i < allObjects.Length; i++)
+        {
+            Vector3 distanceToObstacle = closeRangeNPC.transform.position - allObjects[i].transform.position;
+
+            if (distanceToObstacle.sqrMagnitude > maxDist)
+            {
+                maxDist = (closeRangeNPC.transform.position - allObjects[i].transform.position).sqrMagnitude;
+                furthest = allObjects[i];
+                //Debug.Log(currentObstacle.name);
+            }
+        }
+        return furthest;
     }
 }

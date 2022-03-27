@@ -995,6 +995,7 @@ PrefabInstance:
     - {fileID: 394869921392050816, guid: f002457736123794c9f6436f21ea97e6, type: 3}
     - {fileID: 394869921392050825, guid: f002457736123794c9f6436f21ea97e6, type: 3}
     - {fileID: 145238341356844906, guid: f002457736123794c9f6436f21ea97e6, type: 3}
+    - {fileID: 394869921392050831, guid: f002457736123794c9f6436f21ea97e6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f002457736123794c9f6436f21ea97e6, type: 3}
 --- !u!1 &364378591
 GameObject:
@@ -2455,10 +2456,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1425741913}
   - component: {fileID: 1425741918}
-  - component: {fileID: 1425741917}
   - component: {fileID: 1425741916}
   - component: {fileID: 1425741915}
   - component: {fileID: 1425741914}
+  - component: {fileID: 1425741919}
   m_Layer: 7
   m_Name: Trigger
   m_TagString: Untagged
@@ -2535,32 +2536,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!61 &1425741917
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1425741912}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0.01
 --- !u!212 &1425741918
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2613,6 +2588,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1425741919
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425741912}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.7
 --- !u!1 &1494640833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2649,18 +2640,19 @@ MonoBehaviour:
   health: 10
   removeHealthBy: 7
   speed: 5
+  patrolSpeed: 1
+  hideSpeed: 7
+  chaseSpeed: 4
+  stopSpeed: 0
+  preivousSpeed: 0
+  attackSpeed: 5
   heading: {x: 0, y: 0}
   targetPos: {x: 0, y: 0, z: 0}
   lookAhead: 0
-  isLeft: 0
-  isRight: 0
-  isMiddle: 0
-  point_forward: {x: 0, y: 0, z: 0}
-  point_left: {x: 0, y: 0, z: 0}
-  point_right: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   waypoint: {fileID: 195495610}
   waypoints: []
+  isRandom: 0
 --- !u!114 &1494640835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2676,18 +2668,19 @@ MonoBehaviour:
   health: 10
   removeHealthBy: 7
   speed: 5
+  patrolSpeed: 1
+  hideSpeed: 7
+  chaseSpeed: 4
+  stopSpeed: 0
+  preivousSpeed: 0
+  attackSpeed: 5
   heading: {x: 0, y: 0}
   targetPos: {x: 0, y: 0, z: 0}
   lookAhead: 0
-  isLeft: 0
-  isRight: 0
-  isMiddle: 0
-  point_forward: {x: 0, y: 0, z: 0}
-  point_left: {x: 0, y: 0, z: 0}
-  point_right: {x: 0, y: 0, z: 0}
   rb: {fileID: 0}
   waypoint: {fileID: 195495610}
   waypoints: []
+  isRandom: 0
   bullet: {fileID: 2441536988057660725, guid: f474a093dc5626e4b88180ee1c375fc7, type: 3}
   speedOfBullet: 3
 --- !u!61 &1494640836
@@ -3265,6 +3258,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 394869921392050826, guid: f002457736123794c9f6436f21ea97e6, type: 3}
   m_PrefabInstance: {fileID: 340500121}
   m_PrefabAsset: {fileID: 0}
+--- !u!58 &1763120558
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763120542}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.7
 --- !u!1 &1771156963 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 394869921392050817, guid: f002457736123794c9f6436f21ea97e6, type: 3}
@@ -4033,6 +4042,10 @@ PrefabInstance:
     - target: {fileID: 260431229, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
       propertyPath: lookAhead
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 260431230, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
+      propertyPath: m_BodyType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7650110552412820416, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
       propertyPath: m_Name

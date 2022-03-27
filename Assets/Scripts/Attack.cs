@@ -18,11 +18,11 @@ public class Attack : State
     public override void Enter()
     {
         base.Enter();
-        npc.speed = 5;
+        npc.speed = npc.attackSpeed;
 
         if (npc.GetComponent<CloseRangeNPC>() != null) 
         {
-            npc.GetComponent<BoxCollider2D>().isTrigger = false; 
+            npc.GetComponent<Collider2D>().isTrigger = false; 
         }
         target = GameObject.Find("Trigger").transform;
         Debug.Log("Here on the attack state ");

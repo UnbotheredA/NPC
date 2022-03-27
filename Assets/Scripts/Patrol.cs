@@ -7,10 +7,7 @@ public class Patrol : State
 
     private Transform target;
     //if player is out of sight for 10 seconds go to patrol
-    private GameObject closeRangeNPC;
-
-    private GameObject farRangeNPC;
-
+  
     //TODO make it so that if the npc is returing from attack or chase state to not use patrol speed but npc default speed
     public Patrol(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
     {
@@ -19,12 +16,10 @@ public class Patrol : State
     public override void Enter()
     {
         base.Enter();
-        npc.speed = 1;
-        farRangeNPC = GameObject.Find("FarRangeNPC");
-        closeRangeNPC = GameObject.Find("OfficalCloseRangeNPC");
+        npc.speed = npc.patrolSpeed;
+
+
         target = GameObject.Find("Trigger").transform;
-        npc.rb.bodyType = RigidbodyType2D.Dynamic; ;
-        //this line is causing the problem.
         //closeRangeNPC.GetComponent<BoxCollider2D>().isTrigger = true;
 
         Debug.Log("here on the patrol state");

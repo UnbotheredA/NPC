@@ -59,8 +59,6 @@
     <Compile Include="Assets\Scripts\PlayerMove.cs" />
     <Compile Include="Assets\Scripts\TestMoveNPCCol.cs" />
     <Compile Include="Assets\Scripts\PlayerManager.cs" />
-    <Compile Include="Assets\Scripts\HideBase.cs" />
-    <Compile Include="Assets\Scripts\Flee.cs" />
     <Compile Include="Assets\Scripts\MyPatrol.cs" />
     <Compile Include="Assets\Scripts\SwordAttack.cs" />
     <Compile Include="Assets\Scripts\TestNPCRot.cs" />
