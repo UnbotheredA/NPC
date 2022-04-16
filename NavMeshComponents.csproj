@@ -9,10 +9,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{94890F51-6726-6C31-F182-3FB97EC1BB8D}</ProjectGuid>
+    <ProjectGuid>{DC0DD60B-58E6-CEC5-9D29-01CEE2917D8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>NewAssembly</AssemblyName>
+    <AssemblyName>NavMeshComponents</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -56,35 +56,13 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\PlayerMove.cs" />
-    <Compile Include="Assets\Scripts\TestMoveNPCCol.cs" />
-    <Compile Include="Assets\Scripts\PlayerManager.cs" />
-    <Compile Include="Assets\Scripts\Wander.cs" />
-    <Compile Include="Assets\Scripts\MyPatrol.cs" />
-    <Compile Include="Assets\Scripts\SwordAttack.cs" />
-    <Compile Include="Assets\Scripts\TestNPCRot.cs" />
-    <Compile Include="Assets\Scripts\State.cs" />
-    <Compile Include="Assets\Scripts\Chase.cs" />
-    <Compile Include="Assets\Scripts\RemoveHealth.cs" />
-    <Compile Include="Assets\Scripts\Waypoint.cs" />
-    <Compile Include="Assets\Scripts\testmove.cs" />
-    <Compile Include="Assets\Scripts\Hide.cs" />
-    <Compile Include="Assets\Scripts\UtlityFunctions.cs" />
-    <Compile Include="Assets\Scripts\NPC.cs" />
-    <Compile Include="Assets\Scripts\Clone.cs" />
-    <Compile Include="Assets\Scripts\RandomItemNeeded.cs" />
-    <Compile Include="Assets\Scripts\bullet.cs" />
-    <Compile Include="Assets\Scripts\EnemyManager.cs" />
-    <Compile Include="Assets\Scripts\CloseRangeNPC.cs" />
-    <Compile Include="Assets\Scripts\Patrol.cs" />
-    <Compile Include="Assets\Scripts\StateMachine.cs" />
-    <Compile Include="Assets\Scripts\CalmAnger.cs" />
-    <Compile Include="Assets\Scripts\Attack.cs" />
-    <Compile Include="Assets\Scripts\FarRangeNPC.cs" />
-    <Compile Include="Assets\Scripts\CameraFollowPlayer.cs" />
+    <Compile Include="Assets\NavMeshComponents-master\Assets\NavMeshComponents\Scripts\NavMeshLink.cs" />
+    <Compile Include="Assets\NavMeshComponents-master\Assets\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
+    <Compile Include="Assets\NavMeshComponents-master\Assets\NavMeshComponents\Scripts\NavMeshSurface.cs" />
+    <Compile Include="Assets\NavMeshComponents-master\Assets\NavMeshComponents\Scripts\NavMeshModifier.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Scripts\NewAssembly.asmdef" />
+    <None Include="Assets\NavMeshComponents-master\Assets\NavMeshComponents\Scripts\NavMeshComponents.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

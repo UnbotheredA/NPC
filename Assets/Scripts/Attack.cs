@@ -19,11 +19,6 @@ public class Attack : State
     {
         base.Enter();
         npc.speed = npc.attackSpeed;
-
-        if (npc.GetComponent<CloseRangeNPC>() != null) 
-        {
-            npc.GetComponent<Collider2D>().isTrigger = false; 
-        }
         target = GameObject.Find("Trigger").transform;
         Debug.Log("Here on the attack state ");
     }

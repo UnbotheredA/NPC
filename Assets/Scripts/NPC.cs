@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 public class NPC : MonoBehaviour
 {
     // this script needs to be attached to NPC to update state
@@ -22,6 +22,8 @@ public class NPC : MonoBehaviour
     //how far they can detect ahead
     public float lookAhead = 1;
 
+    public float bailTime = 1f;
+
     public Rigidbody2D rb;
 
     public Waypoint waypoint;
@@ -40,10 +42,14 @@ public class NPC : MonoBehaviour
     public Attack attack;
 
     public Hide hide;
+    
+    public Wander wander;
 
     public bool isRandom;
+
     public virtual void Start()
     {
+        transform.Find("GFX").Rotate(90, 0, 0);
         GameObject[] waypointsArray = GameObject.FindGameObjectsWithTag("Waypoint");
         foreach (var item in waypointsArray)
         {
@@ -55,9 +61,14 @@ public class NPC : MonoBehaviour
         chase = new Chase(this, movementSM);
         attack = new Attack(this, movementSM);
         hide = new Hide(this, movementSM);
+        wander = new Wander(this, movementSM);
         movementSM.Initialize(patrol);
+        //movementSM.Initialize(wander);
         InitializeWayPoint();
+        //StartCoroutine(wander.WaitBeforeNextPoint(1));
         //Debug.Log("npc start class");
+
+
     }
     public void InitializeWayPoint()
     {
@@ -87,28 +98,13 @@ public class NPC : MonoBehaviour
 
     public virtual void Update()
     {
-        //heading is where you want to go or where the forces are pushing you
-        //direction is what your facing
-        heading = targetPos - transform.position;
-        //decreased lookahead
-        var fwd = transform.right * (lookAhead);
-
         if (movementSM != null && movementSM.CurrentState != null)
         {
             movementSM.CurrentState.LogicUpdate();
             //Debug.Log(patrol.waypoint + "Waypoints");
             //CheckNPCHealth();
+           // StartCoroutine(wander.WaitBeforeNextPoint(10));
         }
-    }
-    //point is the end of the line touching the circle
-    //circle is the object that you want to avoid
-    public bool Intersect(Vector3 point, GameObject circle)
-    {
-        //How big is the detection area
-        float radius = 3f;
-        //pos is the middle of the collider 
-        //if a point is less than or equal to the radius intersection has happened
-        return Vector3.Distance(circle.transform.position, point) <= radius;
     }
     public virtual void FixedUpdate()
     {
@@ -136,17 +132,26 @@ public class NPC : MonoBehaviour
                 preivousSpeed = speed;
                 speed = stopSpeed;
             }
-
         }
     }
     protected virtual void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.GetComponent<PlayerMove>())
         {
-            speed = preivousSpeed;
-            preivousSpeed = 0;
-
+            if (speed == 0)
+            {
+                speed = preivousSpeed;
+                Debug.Log("Prev speed is " + preivousSpeed);
+                preivousSpeed = 0;
+            }
         }
+    }
+    public void stopAI()
+    {
+        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        //NavMeshAgent agent;
+        agent.enabled = false;
+        Debug.Log(transform.Find("GFX").eulerAngles.x);
     }
 }
 

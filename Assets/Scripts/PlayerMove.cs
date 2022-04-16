@@ -42,7 +42,7 @@ public class PlayerMove : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rbody.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, Input.GetAxis("Vertical") * speed);
+        rbody.velocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * speed;
     }
 }
 

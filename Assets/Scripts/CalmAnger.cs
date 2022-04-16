@@ -18,20 +18,18 @@ public class CalmAnger : MonoBehaviour
         if (mAnimator != null)
         {
             var dist = Vector3.Distance(transform.position, other.transform.position);
-            //print("Distance to other: " + dist);
             if (dist >= 7.5f)
             {
                 mAnimator.SetTrigger("TrCalm");
             }
             else if (dist <= 7f)
             {
-                mAnimator.SetTrigger("IsInRange");
                 mAnimator.SetTrigger("TrAnger");
-                mAnimator.SetBool("Attack",true);
-                
                 gameObject.GetComponent<MeshRenderer>().material = mat;
             }
-            //Behaviour is seperate to where the states are set.
         }
     }
 }
+//Behaviour is seperate to where the states are set.
+// mAnimator.SetBool("Attack",true);
+// mAnimator.SetTrigger("IsInRange");

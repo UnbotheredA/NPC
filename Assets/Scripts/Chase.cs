@@ -35,6 +35,11 @@ public class Chase : State
                 Debug.Log(npc.name + "is further than 10 so needs to go patrol");
                 stateMachine.ChangeState(npc.patrol);
             }
+            else if (npc.health < 3)
+            {
+                Debug.Log(npc.health);
+                stateMachine.ChangeState(npc.hide);
+            }
         }
     }
     public override void PhysicsUpdate()
@@ -46,6 +51,7 @@ public class Chase : State
             Vector3 playerDirection = (target.transform.position - npc.transform.position).normalized;
             npc.targetPos = npc.transform.position + playerDirection * npc.speed * Time.deltaTime;
             npc.rb.MovePosition(npc.targetPos);
+            //npc.GetComponent<UnityEngine.AI.NavMeshAgent>().SetDestination(npc.targetPos);
             float angle = Mathf.Atan2(playerDirection.y, playerDirection.x) * Mathf.Rad2Deg;
             Quaternion rotationOfPlayer = Quaternion.AngleAxis(angle, Vector3.forward);
             npc.rb.transform.rotation = rotationOfPlayer;

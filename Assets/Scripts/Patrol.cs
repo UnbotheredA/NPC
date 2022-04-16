@@ -17,12 +17,9 @@ public class Patrol : State
     {
         base.Enter();
         npc.speed = npc.patrolSpeed;
-
-
         target = GameObject.Find("Trigger").transform;
-        //closeRangeNPC.GetComponent<BoxCollider2D>().isTrigger = true;
-
         Debug.Log("here on the patrol state");
+        Debug.Log(npc.transform.Find("GFX").eulerAngles.x);
     }
 
     public void UpdateWaypoint(Waypoint wp)
