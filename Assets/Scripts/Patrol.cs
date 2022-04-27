@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Patrol : State
 {
@@ -16,10 +17,10 @@ public class Patrol : State
     public override void Enter()
     {
         base.Enter();
-        npc.speed = npc.patrolSpeed;
+        npc.SetColour(Color.white);
+        npc.GetComponent<NavMeshAgent>().speed =  npc.speed = npc.patrolSpeed;
         target = GameObject.Find("Trigger").transform;
         Debug.Log("here on the patrol state");
-        Debug.Log(npc.transform.Find("GFX").eulerAngles.x);
     }
 
     public void UpdateWaypoint(Waypoint wp)
@@ -41,9 +42,10 @@ public class Patrol : State
         base.PhysicsUpdate();
         if (waypoint && npc && npc.rb != null)
         {
+            npc.GetComponent<UnityEngine.AI.NavMeshAgent>().SetDestination(waypoint.transform.position);
             Vector3 waypointDirection = (waypoint.transform.position - npc.transform.position).normalized;
             npc.targetPos = npc.transform.position + waypointDirection * npc.speed * Time.deltaTime;
-            npc.rb.MovePosition(npc.targetPos);
+            //npc.rb.MovePosition(npc.targetPos);
             float angle = Mathf.Atan2(waypointDirection.y, waypointDirection.x) * Mathf.Rad2Deg;
             Quaternion rotationOfWaypoint = Quaternion.AngleAxis(angle, Vector3.forward);
             npc.rb.transform.rotation = rotationOfWaypoint;

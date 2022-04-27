@@ -1064,6 +1064,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1314291936065999511, guid: f002457736123794c9f6436f21ea97e6, type: 3}
+      propertyPath: Nav
+      value: 
+      objectReference: {fileID: 1763120561}
+    - target: {fileID: 1314291936065999511, guid: f002457736123794c9f6436f21ea97e6, type: 3}
       propertyPath: waypoint
       value: 
       objectReference: {fileID: 1239588415}
@@ -1982,7 +1986,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 42, y: -239.5}
+  m_AnchoredPosition: {x: 42, y: -84}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &747652371
@@ -2153,7 +2157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3178f13551ce18479a602763e7495fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1425741912}
 --- !u!212 &980958612
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3177,7 +3180,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 42, y: -239.5}
+  m_AnchoredPosition: {x: 42, y: -84}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1557153439
@@ -3511,10 +3514,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 1
+  m_Acceleration: 20
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 10
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -3885,10 +3888,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 1
+  m_Acceleration: 20
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 10
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -4125,6 +4128,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 260431229, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
+      propertyPath: Nav
+      value: 
+      objectReference: {fileID: 1968905011}
     - target: {fileID: 260431229, guid: 5cdd758f4e730c54e9a24ca2b0f1cc75, type: 3}
       propertyPath: waypoint
       value: 

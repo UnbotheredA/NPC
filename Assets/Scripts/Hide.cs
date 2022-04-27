@@ -25,6 +25,7 @@ public class Hide : State
     public override void Enter()
     {
         base.Enter();
+        npc.SetColour(Color.cyan);
         npc.speed = npc.hideSpeed;
         target = GameObject.Find("Trigger");
         obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
@@ -77,28 +78,12 @@ public class Hide : State
         if (npc.rb && currentObstacle && target != null)
         {
             Vector3 newPos = (hidePos - npc.transform.position).normalized;
-
-            //instead of hide pos it is target
-            bool right = Vector2.Dot(target.transform.position - npc.rb.transform.position, -npc.rb.transform.up) > 0;
-            bool left = Vector2.Dot(target.transform.position - npc.rb.transform.position, -npc.rb.transform.up) < 0;
-            if (left)
-            {
-                hideDirection = 1;
-            }
-            else if (right)
-            {
-                hideDirection = -1;
-            }
-            else
-            {
-                hideDirection = 0;
-            }
             float angle = Mathf.Atan2(newPos.y, newPos.x) * Mathf.Rad2Deg;
             Quaternion rotationOfSpot = Quaternion.AngleAxis(angle, Vector3.forward);
             npc.rb.transform.rotation = rotationOfSpot;
             if (Vector3.Distance(npc.transform.position, hidePos) > 0.5f)
             {
-                npc.GetComponent<UnityEngine.AI.NavMeshAgent>().SetDestination(hidePos);
+                npc.GetComponent<NavMeshAgent>().SetDestination(hidePos);
             }
             else
             {

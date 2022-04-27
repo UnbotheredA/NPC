@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Attack : State
 {
@@ -9,6 +10,7 @@ public class Attack : State
     private GameObject prefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/prefabs/Bullet.prefab", typeof(GameObject));
 
     private float bulletTimer = 1;
+    private float attackTimer = 1;
 
 
     public Attack(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
@@ -18,7 +20,8 @@ public class Attack : State
     public override void Enter()
     {
         base.Enter();
-        npc.speed = npc.attackSpeed;
+        npc.SetColour(Color.red);
+        npc.GetComponent<NavMeshAgent>().speed = npc.speed = npc.attackSpeed;
         target = GameObject.Find("Trigger").transform;
         Debug.Log("Here on the attack state ");
     }
@@ -28,7 +31,15 @@ public class Attack : State
         if (npc != null && target != null)
         {
             float distance = Vector3.Distance(npc.transform.position, target.transform.position);
-            if (distance > 6)
+            if (distance > 3)
+            {
+                //so npc stops rotating towards players rotation when going back to patrol
+                //rigidbody2D.transform.rotation = Quaternion.identity;
+                Debug.Log(npc.name + "is further than 3 so needs to go chase");
+                Debug.Log("exit attack");
+                stateMachine.ChangeState(npc.chase);
+            }
+            else if (distance > 6)
             {
                 //so npc stops rotating towards players rotation when going back to patrol
                 //rigidbody2D.transform.rotation = Quaternion.identity;
@@ -48,20 +59,49 @@ public class Attack : State
         base.PhysicsUpdate();
         if (npc && target != null)
         {
-            if (npc.GetComponent<CloseRangeNPC>() != null) 
+            if (npc.GetComponent<CloseRangeNPC>() != null)
             {
                 CloseRangeAttack();
             }
-            if (npc.GetComponent<FarRangeNPC>() != null) 
+            if (npc.GetComponent<FarRangeNPC>() != null)
             {
                 FarRangeAttack();
             }
         }
     }
+    public void DamagePlayer()
+    {
+        target.GetComponent<PlayerManager>().ApplyDamage();
+    }
     private void CloseRangeAttack()
     {
+        if (npc.InFOV(target.transform.position) && Vector3.Distance(npc.transform.position, target.transform.position) < 2f)
+        {
+
+            if (attackTimer == 1)
+            {
+                Debug.Log("Applying damage to player");
+                DamagePlayer();
+            }
+            attackTimer -= Time.deltaTime;
+
+            if (attackTimer <= 0)
+            {
+                attackTimer = 1;
+            }
+
+        }
+        else
+        {
+            attackTimer = 1;
+        }
+
+        if (Vector3.Distance(npc.transform.position, target.transform.position) > 2.5f)
+            npc.Nav.SetDestination(target.transform.position);
+        else
+            npc.Nav.speed = 0;
+
         Vector3 playerDirection = (target.transform.position - npc.transform.position).normalized;
-        npc.rb.MovePosition(npc.transform.position + playerDirection * npc.speed * Time.deltaTime);
         float angle = Mathf.Atan2(playerDirection.y, playerDirection.x) * Mathf.Rad2Deg;
         var rotationOfPlayer = Quaternion.AngleAxis(angle, Vector3.forward);
         npc.rb.transform.rotation = rotationOfPlayer;

@@ -42,14 +42,21 @@ public class NPC : MonoBehaviour
     public Attack attack;
 
     public Hide hide;
-    
+
     public Wander wander;
 
     public bool isRandom;
 
+    public NavMeshAgent Nav;
+
+    public GameObject player;
+
     public virtual void Start()
     {
+
+        player.GetComponent<PlayerManager>();
         transform.Find("GFX").Rotate(90, 0, 0);
+        Nav = GetComponent<NavMeshAgent>();
         GameObject[] waypointsArray = GameObject.FindGameObjectsWithTag("Waypoint");
         foreach (var item in waypointsArray)
         {
@@ -76,6 +83,8 @@ public class NPC : MonoBehaviour
     }
     public void NewWaypoint(Waypoint wp)
     {
+        if (player.GetComponent<PlayerManager>().hasPlayerDied == true)
+            isRandom = true;
         if (isRandom == true)
         {
             Waypoint currentWaypoint = patrol.waypoint;
@@ -85,9 +94,11 @@ public class NPC : MonoBehaviour
             int random = Random.Range(0, availableWaypoints.Count);
             newWaypoint = availableWaypoints[random];
             patrol.UpdateWaypoint(newWaypoint);
+            Debug.Log("random waypoints");
         }
         else
         {
+            Debug.Log("specific waypoints");
             patrol.UpdateWaypoint(wp);
         }
     }
@@ -103,7 +114,7 @@ public class NPC : MonoBehaviour
             movementSM.CurrentState.LogicUpdate();
             //Debug.Log(patrol.waypoint + "Waypoints");
             //CheckNPCHealth();
-           // StartCoroutine(wander.WaitBeforeNextPoint(10));
+            // StartCoroutine(wander.WaitBeforeNextPoint(10));
         }
     }
     public virtual void FixedUpdate()
@@ -125,25 +136,27 @@ public class NPC : MonoBehaviour
     //TODO add this to the close range npc
     protected virtual void OnCollisionEnter2D(Collision2D col)
     {
+        Collider2D myCollider = col.GetContact(0).otherCollider;
+        //Debug.Log(myCollider.gameObject.name);
         if (col.collider.GetComponent<PlayerMove>())
         {
-            if (preivousSpeed == 0)
-            {
-                preivousSpeed = speed;
-                speed = stopSpeed;
-            }
+            //if (preivousSpeed == 0)
+            //{
+            //    preivousSpeed = Nav.speed;
+            //    Nav.speed = stopSpeed;
+            //}
         }
     }
     protected virtual void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.GetComponent<PlayerMove>())
         {
-            if (speed == 0)
-            {
-                speed = preivousSpeed;
-                Debug.Log("Prev speed is " + preivousSpeed);
-                preivousSpeed = 0;
-            }
+            //if (Nav.speed == 0)
+            //{
+            //    Nav.speed = preivousSpeed;
+            //    Debug.Log("Prev speed is " + preivousSpeed);
+            //    preivousSpeed = 0;
+            //}
         }
     }
     public void stopAI()
@@ -152,6 +165,21 @@ public class NPC : MonoBehaviour
         //NavMeshAgent agent;
         agent.enabled = false;
         Debug.Log(transform.Find("GFX").eulerAngles.x);
+    }
+
+    public void SetColour(Color color)
+    {
+        transform.Find("GFX").Find("Body").GetComponent<SpriteRenderer>().color = color;
+    }
+    public bool InFOV(Vector3 target)
+    {
+        Vector3 targetDir = target - transform.position;
+        float angleToPlayer = (Vector3.Angle(targetDir, transform.right));
+
+        if (angleToPlayer >= -45 && angleToPlayer <= 45) // 90° FOV
+            return true;
+
+        return false;
     }
 }
 

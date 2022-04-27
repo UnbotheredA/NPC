@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Chase : State
 {
@@ -14,7 +15,8 @@ public class Chase : State
     {
         //Animation is handled here
         base.Enter();
-        npc.speed = npc.chaseSpeed;
+        npc.SetColour(Color.yellow);
+        npc.GetComponent<NavMeshAgent>().speed = npc.chaseSpeed;
         target = GameObject.Find("Trigger").transform;
     }
     //basically since the close range npc is the only npc that gets to the player its postion will be 3 but the far range will still be patrolling
@@ -32,7 +34,7 @@ public class Chase : State
             //if we did not have this npc will only go back to patrol if attack state is active
             else if (distance > 10)
             {
-                Debug.Log(npc.name + "is further than 10 so needs to go patrol");
+                //Debug.Log(npc.name + "is further than 10 so needs to go patrol");
                 stateMachine.ChangeState(npc.patrol);
             }
             else if (npc.health < 3)
@@ -49,9 +51,8 @@ public class Chase : State
         {
             //face the player when chasing the player
             Vector3 playerDirection = (target.transform.position - npc.transform.position).normalized;
-            npc.targetPos = npc.transform.position + playerDirection * npc.speed * Time.deltaTime;
-            npc.rb.MovePosition(npc.targetPos);
-            //npc.GetComponent<UnityEngine.AI.NavMeshAgent>().SetDestination(npc.targetPos);
+            //npc.rb.MovePosition(npc.targetPos);
+            npc.GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
             float angle = Mathf.Atan2(playerDirection.y, playerDirection.x) * Mathf.Rad2Deg;
             Quaternion rotationOfPlayer = Quaternion.AngleAxis(angle, Vector3.forward);
             npc.rb.transform.rotation = rotationOfPlayer;
