@@ -95,6 +95,7 @@ public class NPC : MonoBehaviour
             newWaypoint = availableWaypoints[random];
             patrol.UpdateWaypoint(newWaypoint);
             Debug.Log("random waypoints");
+            SetColour(Color.grey);
         }
         else
         {

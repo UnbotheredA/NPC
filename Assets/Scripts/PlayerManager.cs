@@ -40,8 +40,8 @@ public class PlayerManager : MonoBehaviour
     }
     public void ApplyDamage(float amount = 0.1f)
     {
-        //cooldown.fillAmount -= 0.1f;
-        cooldown.fillAmount -= 2f;
+        //for testing purposes use -= 2f;
+        cooldown.fillAmount -= 0.1f;
     }
 
     //private void OnTriggerStay2D(Collider2D collision)

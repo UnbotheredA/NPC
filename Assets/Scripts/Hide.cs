@@ -7,14 +7,14 @@ public class Hide : State
 {
     GameObject target;
     GameObject currentObstacle;
-    //Rigidbody2D rbody;
+    
 
     GameObject[] obstacles;
+
     List<GameObject> availableObstacles;
 
-    //Vector3 shortestDistaceToObstacle;
     Vector3 hidePos;
-    int hideDirection;
+    
     float distanceFromColider = 4f;
     float timerTilBail;
     public Hide(NPC npc, StateMachine stateMachine) : base(npc, stateMachine)
@@ -26,7 +26,7 @@ public class Hide : State
     {
         base.Enter();
         npc.SetColour(Color.cyan);
-        npc.speed = npc.hideSpeed;
+        npc.Nav.speed = npc.hideSpeed;
         target = GameObject.Find("Trigger");
         obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
         currentObstacle = null;
@@ -94,15 +94,9 @@ public class Hide : State
             }
         }
     }
-    public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion angle)
-    {
-        return angle * (point - pivot) + pivot;
-    }
-    // The first parameter would be the NPC and the second would be the object it hides from
     public override void Exit()
     {
         base.Exit();
-        //npc.stopAI();
     }
 }
 

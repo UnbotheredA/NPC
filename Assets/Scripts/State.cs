@@ -1,7 +1,4 @@
-using UnityEngine;
-
-
-public abstract class State 
+public abstract class State
 {
     public NPC npc;
 
@@ -19,11 +16,11 @@ public abstract class State
     }
     public virtual void PhysicsUpdate()
     {
-        
+
     }
     public virtual void Enter()
     {
-        
+
     }
     public virtual void Exit()
     {
